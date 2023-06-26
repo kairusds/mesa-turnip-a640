@@ -3,6 +3,7 @@ Mesa Turnip builds for my personal use case
 
 ## Requirements
 - Android 11+
+- arm64 Snapdragon device
 
 ## Notice
 So far, these builds have only been tested on a Poco X3 Pro and Poco F3, so I'm not sure if this will also work with other Snapdragon devices.
