@@ -1,8 +1,12 @@
-# Mesa Turnip Adreno 640
-Mesa Turnip builds for my Snapdragon 855+/860 device
+# Mesa Turnip Adreno
+Mesa Turnip builds for my personal use case
 
 ## Requirements
 - Android 11+
+
+## Notice
+So far, these builds have only been tested on a Poco X3 Pro and Poco F3, so I'm not sure if this will also work with other Snapdragon devices.
+Feel free to post your experience on the Issues tab.
 
 ## Credits and special thanks:
 - [**Mesa**](https://gitlab.freedesktop.org/mesa/mesa)
