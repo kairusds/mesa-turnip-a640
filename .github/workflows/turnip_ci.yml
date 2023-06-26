@@ -1,28 +1,42 @@
-name: Build "turnip"
+name: Build Turnip
 
-on:
-  workflow_dispatch:
- # schedule:
- # - cron: '30 0-23 * * *'
+on: workflow_dispatch
 
 jobs:
-  start_building_turnip:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with: { ref: alpha }
+    - name: Clone master
+      uses: actions/checkout@v3
 
     - name: Prepare environment
       run: |
         sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
         sudo apt update
         sudo apt build-dep mesa -y
-    
+        mkdir -p turnip_workdir/mesa-main
+
+    - name: Clone mesa from Freedesktop GitLab
+      uses: actions/checkout@v3
+      with:
+        github-server-url: "https://gitlab.freedesktop.org"
+        repository: "mesa/mesa"
+        ref: main
+        path: turnip_workdir/mesa-main
+        token: ${{ secrets.FREEDESKTOP_GITLAB_PAT }}
+
+    - name: Setup MESA_COMMIT_HASH
+      run: (cd turnip_workdir/mesa-main && echo "MESA_COMMIT_HASH=$(git log -1 --pretty=format:%h)" >> $GITHUB_ENV)
+
     - name: Execute build script
       run: bash ./turnip_builder.sh
+      env:
+        MESA_COMMIT_HASH: ${{ env.MESA_COMMIT_HASH }}
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
+    - name: Create release
+      uses: softprops/action-gh-release@v1
       with:
-        name: turnip-23.2.0-T-Alpha_MrPurple.adpkg.zip
-        path: turnip_workdir/turnip-23.2.0-T-Alpha_MrPurple.adpkg.zip
+        body: |
+          Built with [Commit ${{ env.MESA_COMMIT_HASH }}](https://gitlab.freedesktop.org/mesa/mesa/-/tree/${{ env.MESA_COMMIT_HASH }})
+        files: turnip_workdir/turnip-${{ env.MESA_COMMIT_HASH }}-git.adpkg.zip
+        tag_name: ${{ env.MESA_COMMIT_HASH }}
