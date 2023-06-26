@@ -4,6 +4,9 @@ Mesa Turnip builds for my Snapdragon 855+/860 device
 ## Requirements
 - Android 11+
 
+## Notice
+- So far I have only tested this on my Poco X3 Pro(with MIUI 12.5.7-Android 11) so I'm not sure if this will also work with other Snapdragon devices.
+
 ## Credits and special thanks:
 - [**Mesa**](https://gitlab.freedesktop.org/mesa/mesa)
 - [**ilhan-athn7**](https://github.com/ilhan-athn7)
